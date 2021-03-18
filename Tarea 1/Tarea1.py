@@ -1,39 +1,3 @@
-# def palabras1000(n): #Funciona hasta mil
-
-#     unidades = ["cero","un","dos","tres","cuatro","cinco","seis","siete","ocho",
-#               "nueve"]
-#     decenas = ["","diez","veinte","treinta","cuarenta","cincuenta","sesenta",
-#              "setenta","ochenta","noventa"]
-#     centenas = ["","ciento","doscientos","trescientos","cuatrocientos","quinientos",
-#               "seiscientos","setecientos","ochocientos","novecientos"]
-
-#     (c,d,u)=(n//100,(n%100//10),n%10)
-
-#     return centenas[c]+" "+decenas[d]+" y "+unidades[u]
-
-
-# def palabras(n): #Hasta mil millones
-
-#     assert 0<=n<1000000000
-
-#     if n==0:
-#         return "cero"
-
-#     (a,b,c)=(n//1000000,(n%1000000)//1000,n%1000)
-#     # n es de la forma "a millones b mil c"
-#     return palabras1000(a) + " millones " +palabras1000(b)+ " mil " + palabras1000(c)
-
-
-# ### Fallas de mercado
-# ##print(palabras(42515))
-
-
-# def palabrasSinMillon(cm,dm,um,c,d,u):
-#     print("marco")
-
-
-
-
 
 # Indica números de hasta 3 dígitos en palabras
 def palabras999(n):
@@ -81,16 +45,50 @@ def palabras999(n):
     elif u == 1:
         resultado = centenas[c] + " " + decenas[d] + " y " + "uno"
 
-    print(resultado)
+    if resultado[0] == " ":         #Saco los espacios del principio porque se ven feos unu
+        resultado = resultado[1:]
+
+    return resultado
 
 
 ##### Test
 
 
-for i in range(0,999):
-    palabras999(i)
+# for i in range(0,999):
+#     print(palabras999(i))
 
 
 # palabras2(1234567890)
 # palabras2(567890)
 #palabras2(101)
+
+
+def numeroATexto(n):
+
+    assert n < 1000000000 #Sólo se trabaja con numeros bajo cien millones
+
+    (cM,dM, uM,cm,dm,um,c,d,u)= ((n%1000000000//100000000),(n%100000000//10000000),(n%10000000//1000000),(n%1000000//100000),(n%100000//10000),(n%10000//1000),(n%1000//100),(n%100//10),n%10) 
+
+    resultado = palabras999(c*100 + d*10 + u)
+
+    sumaCentena = c + d + u
+    sumaMillones = cM + dM + uM
+    sumaMiles = cm + dm + um
+
+    # Voy armando de a poco el string resultado acorde a lo que se necesite
+    if sumaMiles != 0:
+        resultado = palabras999(cm*100 + dm*10 + um) + " mil " + resultado
+
+    if sumaMillones != 0:
+        resultado = palabras999(cM*100 + dM*10 + uM)  + " millones " + resultado    
+
+    if sumaCentena == 0:
+        resultado = resultado[0:-5] #quito el " cero" del final del resultado (-5 pq' son 5 caracteres a cortar hacia atras)
+
+    #Para evitar que diga "uno mil cien" en vez de "mil cien"
+    #if um == 1:
+
+    return resultado
+
+
+print(numeroATexto(1001000))    #TODO: ARREGLAR ESTO CON LOS UNO MILLONES Y EL UNO MIL

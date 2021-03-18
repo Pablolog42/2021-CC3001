@@ -1,6 +1,6 @@
 
 # Indica números de hasta 3 dígitos en palabras
-def palabras999(n):
+def palabras1000(n):
 
     # Listas de palabras
     unidades = ["cero","un","dos","tres","cuatro","cinco","seis","siete","ocho",
@@ -52,10 +52,8 @@ def palabras999(n):
 
 
 ##### Test
-
-
 # for i in range(0,999):
-#     print(palabras999(i))
+#     print(palabras1000(i))
 
 
 # palabras2(1234567890)
@@ -69,7 +67,7 @@ def numeroATexto(n):
 
     (cM,dM, uM,cm,dm,um,c,d,u)= ((n%1000000000//100000000),(n%100000000//10000000),(n%10000000//1000000),(n%1000000//100000),(n%100000//10000),(n%10000//1000),(n%1000//100),(n%100//10),n%10) 
 
-    resultado = palabras999(c*100 + d*10 + u)
+    resultado = palabras1000(c*100 + d*10 + u)
 
     sumaCentena = c + d + u
     sumaMillones = cM + dM + uM
@@ -77,18 +75,27 @@ def numeroATexto(n):
 
     # Voy armando de a poco el string resultado acorde a lo que se necesite
     if sumaMiles != 0:
-        resultado = palabras999(cm*100 + dm*10 + um) + " mil " + resultado
+        resultado = palabras1000(cm*100 + dm*10 + um) + " mil " + resultado
 
     if sumaMillones != 0:
-        resultado = palabras999(cM*100 + dM*10 + uM)  + " millones " + resultado    
+        resultado = palabras1000(cM*100 + dM*10 + uM)  + " millones " + resultado    
 
     if sumaCentena == 0:
         resultado = resultado[0:-5] #quito el " cero" del final del resultado (-5 pq' son 5 caracteres a cortar hacia atras)
 
-    #Para evitar que diga "uno mil cien" en vez de "mil cien"
-    #if um == 1:
+    #Para evitar que diga "uno mil cien" en vez de "un mil cien"
+    if um == 1:
+        resultado = resultado.replace(" uno ", " un ", 1) # cambia el "uno" por "un" una sola vez (el de las unidades de mil)
+    
+    if uM == 1:
+        resultado = resultado.replace(" uno ", " un ", 1) # cambia el "uno" por "un" otra vez (el de las unidades de millon)
+        resultado = resultado.replace("uno ", "un ", 1)   # Acá lo cambia si parte con "uno millon" (por lo del espacio en frente)
+        resultado = resultado.replace("millones", "millón", 1) # Congruencuia del plural
 
     return resultado
 
 
-print(numeroATexto(1001000))    #TODO: ARREGLAR ESTO CON LOS UNO MILLONES Y EL UNO MIL
+print(numeroATexto(1199999))    #TODO: ARREGLAR ESTO CON LOS UNO MILLONES Y EL UNO MIL
+
+# for i in range(1000000,1200000):
+#     print(numeroATexto(i))

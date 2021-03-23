@@ -86,6 +86,7 @@ def numeroATexto(n):
     #Para evitar que diga "uno mil cien" en vez de "un mil cien"
     if um == 1:
         resultado = resultado.replace(" uno ", " un ", 1) # cambia el "uno" por "un" una sola vez (el de las unidades de mil)
+        resultado = resultado.replace("uno ", "un ", 1) # cambia el "uno" por "un" una sola vez (el de las unidades de mil)
     
     if uM == 1:
         resultado = resultado.replace(" uno ", " un ", 1) # cambia el "uno" por "un" otra vez (el de las unidades de millon)
@@ -95,7 +96,8 @@ def numeroATexto(n):
     return resultado
 
 
-print(numeroATexto(1199999))    #TODO: ARREGLAR ESTO CON LOS UNO MILLONES Y EL UNO MIL
+# print(numeroATexto(30777777))    #TODO: ARREGLAR ESTO CON LOS UNO MILLONES Y EL UNO MIL
 
-# for i in range(1000000,1200000):
-#     print(numeroATexto(i))
+# Test ridículo
+for i in range(0,1200000):
+    print(numeroATexto(i))

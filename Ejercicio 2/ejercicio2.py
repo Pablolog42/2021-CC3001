@@ -7,7 +7,6 @@ def permutaciones(x,ini,fin):
         return print(resultado)
 
     for i in range(ini, fin+1):
-
         (x[ini], x[i]) = (x[i], x[ini])
         permutaciones(x, ini+1, fin)
         (x[ini], x[i]) = (x[i], x[ini])

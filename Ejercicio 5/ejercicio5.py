@@ -44,18 +44,21 @@ class Lista_doble_enlace:
             p=p.prev
     
     def destruye_prev(self):
-        p= self.cabecera.sgte
+        p = self.cabecera.sgte
         while p is not self.cabecera:
-            yield p.info
-            p.prev = None
+            p.prev = self.cabecera
             p = p.sgte
         
- 
+
         #Define aqui la función para destruir todos los enlaces "prev"
             
     def repara_prev(self):
-
-        pass#Define aquí la función para reparar los enlaces "prev"
+        p = self.cabecera.sgte
+        while p is not self.cabecera:
+            # p tiene que venir antes que el siguiente a p
+            p.sgte.prev = p
+            p = p.sgte
+   
 
     def dibujar(self):
       lld=aed.LinkedListDrawer(fieldHeader="cabecera", fieldData="info", fieldLink="sgte", fieldReverseLink="prev")

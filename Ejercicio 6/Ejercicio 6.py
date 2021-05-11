@@ -13,11 +13,7 @@ class Pila:
 #Se le pide escribir una funcion chequeo2 que reciba 3 parametros de tipo string: ``s``, ``a`` y ``b``. En ``s`` viene la secuencia de paréntesis a chequear, en ``a`` vienen los abre parentesis permitidos y en ``b`` los cierra paréntesis respectivos de modo que en ``b[i]`` está el paréntesis que cierra a ``a[i]``. 
 #Por simplicidad use la implementacion de pila que viene a continuacion 
 def chequeo2(s, a, b):
-    #si es un abre paréntesis entonces se pone en el stack y se continúa con el chequeo del próximo símbolo
-    #si es un cierra paréntesis entonces se revisa el elemento del tope del stack
-        #si el stack está vacío, entonces la secuencia está mal escrita y ahí termina el proceso.
-        #si el stack no está vacío, se extrae el símbolo del tope y se chequea si es un abre paréntesis que coincide con el tipo de cierra paréntesis que se encontró. Si es así, se continúa con #el chequeo del próximo símbolo, si no la fórmula está mal escrita y ahí termina el proceso.
-
+    
     stackParentesis = Pila()
 
     for parentesis in s:
@@ -26,8 +22,10 @@ def chequeo2(s, a, b):
         if parentesis in a:
             stackParentesis.push(parentesis)
             continue
-
+        
+        #caso cierra parentesis
         if parentesis in b:
+            #Si parte con un cierra parentesis, está mal escrita
             if stackParentesis.is_empty():
                 return "INCORRECTA"
 
@@ -35,6 +33,7 @@ def chequeo2(s, a, b):
             indiceA = a.find(tope) 
             indiceB = b.find(parentesis) 
 
+            # en b[i] está el paréntesis que cierra a a[i]
             if indiceA == indiceB:
                 continue
             

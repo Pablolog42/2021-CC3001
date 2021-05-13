@@ -1,6 +1,20 @@
 import aed_utilities as aed
 from copy import copy
 
+
+# Nodo externo
+class Nodoe:
+    def __init__(self, info):
+        self.info=info
+    def postorden(self):
+        print(self.info, end=" ")
+
+    def derivada(self,x):
+        # Me van a quedar en los nodos externos solamente o la variable solita (derivada 1), o una constante con derivada 0
+        return Nodoe(1) if self.info == x else Nodoe(0)
+
+
+
 #Nodo interno
 class Nodoi:
     def __init__(self, izq, info, der):
@@ -46,28 +60,38 @@ class Nodoi:
         if self.info == "^":
             
             #Juan segura vivió muchos años (su RAM no tanto si)
-            izquierdoOriginal = copy(self.izq)
-            derechoOriginal = copy(self.der)
+            funcionInterna = copy(self.izq)
+            exponente = copy(self.der) #notar que el exponente siempre será un numero
+            self.info = "*"
+
+            # por si estoy derivando respecto a otra variable nada que ver xdxdxd
+            if type(self.izq) == Nodoe and self.izq.info != x: #and self.izq.info not in ["+", "-", "*", "/", "^"]:
+                self.izq = Nodoe(0)
+            
 
             #REGLA DE LA CADENA AAAAAA
             #Regla exponente entero x^n -> (n)*(x^(n-1))
-            self.info = "*"
-            # self.der = Nodoe(self.der) Básicamente puedo dejar el lado del exponente como estaba (pues la multiplicacion conmuta) (en vez de (n)*(x^(n-1)), estoy computando (x^(n-1))*(n) )
-            self.izq = Nodoi(izquierdoOriginal, "^", Nodoi(derechoOriginal,"-", Nodoe(1))) # Lo multiplico por el numero elevado a uno menos
+            
+            # # self.der = Nodoe(self.der) Básicamente puedo dejar el lado del exponente como estaba (pues la multiplicacion conmuta) (en vez de (n)*(x^(n-1)), estoy computando (x^(n-1))*(n) )
+            #self.izq = Nodoi(Nodoi(izquierdoOriginal,"*", derechoOriginal), "^", Nodoi(derechoOriginal,"-", Nodoe(1))) # Lo multiplico por el numero elevado a uno menos
+
+            elif type(funcionInterna) == Nodoe:
+                # n*(t^(n-1))
+                self.der = Nodoi(funcionInterna, "^", Nodoi(exponente,"-", Nodoe(1)))
+                self.izq = exponente
+                return self
+            
+            else:
+                
+                pass
+
+
+
+
 
         return self
 
 
-# Nodo externo
-class Nodoe:
-    def __init__(self, info):
-        self.info=info
-    def postorden(self):
-        print(self.info, end=" ")
-
-    def derivada(self,x):
-        # Me van a quedar en los nodos externos solamente o la variable solita (derivada 1), o una constante con derivada 0
-        return Nodoe(1) if self.info == str(x) else Nodoe(0)
 
 
 
@@ -172,10 +196,21 @@ def probar_derivada(formula,x):
 
 #ARRGLAR ESTO
 #PROBLAMAS CON REGLA DE LA CADENA Y EL EXPONENTE AAAA
-probar_derivada("(2*x)^2","x")
+# probar_derivada("(a*x)^b","x")
 
 # arboli = Arbol("x^2") 
 # iDerivado = arboli.derivada("x")
+
+# probar_derivada("(2*x)^2+a","x")
+
+# derivamos con respecto a 1
+# probar_derivada("1^2", "1")
+
+#Arreglar esto no funca
+#probar_derivada("(t*x)+x", "t")
+
+probar_derivada("t+q+r+s+g+j+h+b+v-h-d-x-r", "x")
+
 
 
 # a=122313

@@ -30,69 +30,51 @@ class Nodoi:
     def derivada(self,x):
 
         if self.info == "+" or self.info == "-":
-            self.izq = self.izq.derivada(x)
-            self.der = self.der.derivada(x)
+            return Nodoi(self.izq.derivada(x), self.info, self.der.derivada(x))
 
         if self.info == "*":
            
            #No quiero aliasing ni cosas raras :(
            #Acá ocupo la copia para no tener problemas de punteros que se me modifiquen
-           izquierdoOriginal = copy(self.izq)
-           derechoOriginal = copy(self.der)
+            izquierdoOriginal = copy(self.izq)
+            derechoOriginal = copy(self.der)
 
-            # Regla de la derivada de un producto
-           self.info = "+"
-           self.izq =  Nodoi(self.izq.derivada(x), "*", derechoOriginal)
-           self.der =  Nodoi(self.der.derivada(x), "*", izquierdoOriginal) 
+            #(uv)' = u'v + v'u
+            return Nodoi(Nodoi(self.izq.derivada(x),"*",derechoOriginal), "+", Nodoi(self.der.derivada(x), "*", izquierdoOriginal))
+
+
+
 
         if self.info == "/":
-           
-           #CUIDADO CON EL ALIASING ACA QUE OCUPAS EL DERECHOORIGINAL MAS DE UNa VEZ (al parecer funca igual, vamos chile)
+           #Para evitar aliasing en la recursividad
            izquierdoOriginal = copy(self.izq)
            derechoOriginal = copy(self.der)
 
-            # Regla de la derivada de un cociente
-           self.info = "/"
-           self.izq =  Nodoi(Nodoi(self.izq.derivada(x), "*", derechoOriginal), "-", Nodoi(self.der.derivada(x),"*", izquierdoOriginal)) #Numerador en la regla del cuociente
-           self.der =  Nodoi(derechoOriginal, "^", Nodoe(2)) #denominador va al cuadrado
+           # Regla de la derivada de un cociente
+           operador = "/"
+           numerador =  Nodoi(Nodoi(self.izq.derivada(x), "*", derechoOriginal), "-", Nodoi(self.der.derivada(x),"*", izquierdoOriginal)) #Numerador en la regla del cuociente
+           denominador =  Nodoi(derechoOriginal, "^", Nodoe(2)) #denominador va al cuadradox
+           return Nodoi(numerador, operador, denominador)
 
-        #HAY QUE ARREGLAR ESTO
+
         if self.info == "^":
             
             #Juan segura vivió muchos años (su RAM no tanto si)
             funcionInterna = copy(self.izq)
-            exponente = copy(self.der) #notar que el exponente siempre será un numero
-            self.info = "*"
+            exponente = copy(self.der) #notar que el exponente siempre será un numero (Nodoe)
 
-            # por si estoy derivando respecto a otra variable nada que ver xdxdxd
-            if type(self.izq) == Nodoe and self.izq.info != x: #and self.izq.info not in ["+", "-", "*", "/", "^"]:
-                self.izq = Nodoe(0)
+            # n-1
+            exponenteReducido = Nodoi(exponente, "-", Nodoe(1))
+
+
+            ladoDerecho = Nodoi(exponente, "*", Nodoi(funcionInterna,"^", exponenteReducido))
+
+            #Regla de la cadena
+            ladoIzquierdo = self.izq.derivada(x)
             
-
-            #REGLA DE LA CADENA AAAAAA
-            #Regla exponente entero x^n -> (n)*(x^(n-1))
-            
-            # # self.der = Nodoe(self.der) Básicamente puedo dejar el lado del exponente como estaba (pues la multiplicacion conmuta) (en vez de (n)*(x^(n-1)), estoy computando (x^(n-1))*(n) )
-            #self.izq = Nodoi(Nodoi(izquierdoOriginal,"*", derechoOriginal), "^", Nodoi(derechoOriginal,"-", Nodoe(1))) # Lo multiplico por el numero elevado a uno menos
-
-            elif type(funcionInterna) == Nodoe:
-                # n*(t^(n-1))
-                self.der = Nodoi(funcionInterna, "^", Nodoi(exponente,"-", Nodoe(1)))
-                self.izq = exponente
-                return self
-            
-            else:
-                
-                pass
-
-
-
-
-
-        return self
-
-
-
+            return Nodoi(ladoIzquierdo, "*", ladoDerecho)
+        
+        return None
 
 
 #Toma un string de tipo "ax+b" y lo pasa a arbol binario
@@ -211,8 +193,5 @@ def probar_derivada(formula,x):
 
 probar_derivada("t+q+r+s+g+j+h+b+v-h-d-x-r", "x")
 
-
-
-# a=122313
 
 

@@ -13,8 +13,6 @@ class Nodoe:
         # Me van a quedar en los nodos externos solamente o la variable solita (derivada 1), o una constante con derivada 0
         return Nodoe(1) if self.info == x else Nodoe(0)
 
-
-
 #Nodo interno
 class Nodoi:
     def __init__(self, izq, info, der):
@@ -41,9 +39,6 @@ class Nodoi:
 
             #(uv)' = u'v + v'u
             return Nodoi(Nodoi(self.izq.derivada(x),"*",derechoOriginal), "+", Nodoi(self.der.derivada(x), "*", izquierdoOriginal))
-
-
-
 
         if self.info == "/":
            #Para evitar aliasing en la recursividad
@@ -75,7 +70,6 @@ class Nodoi:
             return Nodoi(ladoIzquierdo, "*", ladoDerecho)
         
         return None
-
 
 #Toma un string de tipo "ax+b" y lo pasa a arbol binario
 class Arbol:
@@ -161,35 +155,8 @@ def probar_derivada(formula,x):
     g.dibujar()
 
 
-#probar_derivada("(2+x)+(x+3)","x")
 
 
-# arbolh = Arbol("(2+x)+(x+3)") 
-# hDerivado = arbolh.derivada("x")
-# hDerivado.dibujar()
-
-#probar_derivada("(2*x)*(3*x)","x")
-
-
-#probar_derivada("(x+1)/(x-1)","x")
-
-#probar_derivada("x^2","x")
-
-
-#ARRGLAR ESTO
-#PROBLAMAS CON REGLA DE LA CADENA Y EL EXPONENTE AAAA
-# probar_derivada("(a*x)^b","x")
-
-# arboli = Arbol("x^2") 
-# iDerivado = arboli.derivada("x")
-
-# probar_derivada("(2*x)^2+a","x")
-
-# derivamos con respecto a 1
-# probar_derivada("1^2", "1")
-
-#Arreglar esto no funca
-#probar_derivada("(t*x)+x", "t")
 
 probar_derivada("t+q+r+s+g+j+h+b+v-h-d-x-r", "x")
 

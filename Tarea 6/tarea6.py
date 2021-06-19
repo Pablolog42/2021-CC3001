@@ -1,4 +1,5 @@
 import numpy as np
+from numpy.core.fromnumeric import mean
 
 def myhash(x,m):
   return hash(x)%m
@@ -30,60 +31,64 @@ class Chaining:
 
     def insert(self,x):
       # busca x (si no está lo inserta) y retorna el costo de búsqueda (numero de comparaciones)
-
       tablaHashing = self.t
       m = len(tablaHashing)
       hash = myhash(x,m)
 
+      comparaciones = 0
 
       # Se busca si la palabra está ya en la tabla
 
       # Si no hay nadie en el hash, se crea una entrada
       if tablaHashing[hash] == None:
         tablaHashing[hash] = Nodo(x)
-        return
+        return comparaciones
 
       nodoActual = tablaHashing[hash]
 
+      # Busco si existe el elemento en la lista encadenada
+      # Es Aquí cuando se generan las ocmparaciones que toman tiempo
       while nodoActual.sgte != None:
+        
+        # Cada ciclo del while comparo una vez
+        comparaciones += 1
+
         # Si existe en algun elemento de la lista, no hago nada
         if nodoActual.info == x:
-          return 
+          return comparaciones
+
+        # Itero sobre la lista
         nodoActual = nodoActual.sgte
+
+        
       
       #Si no existe en la lista, lo apendo al final
       nodoActual.sgte = Nodo(x) if nodoActual.info != x else None
 
-
-
-
-      
-
+      return comparaciones
 
 
 
 
-   
+        
 
 
 f=open(r"C:\Users\pablo\Desktop\Programación\Python\2021-CC3001\Tarea 6\cap1.txt","r")
 texto=f.read()  
 palabras=texto.split()
 
-
-listaHash = Chaining(1000)
+## Prueba Chaining ################
+listaChaining = Chaining(1000)
+listaComparacionChaining = []
 
 for palabra in palabras:
-  listaHash.insert(palabra)
+  x = listaChaining.insert(palabra)
+  listaComparacionChaining.append(x)
 
-print("---")
+print(f"El promedio de comparaciones es: {mean(listaComparacionChaining)} || El máx de comparaciones es: {max(listaComparacionChaining)}")
+######################################
 
 
-# print(palabras)
-#esto deja en palabras una lista python en que cada elemento es una palabra del archivo
-#luego debe escribir el código para 
-#   - crear una estructura Hashing1 y otra Hashing2
-#   - insertar/buscar cada una de las palabras en ambas estructuras registrando el costo
-#   - finalmente imprimir las estadisticas pedidas
+
 
 

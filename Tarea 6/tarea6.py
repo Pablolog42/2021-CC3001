@@ -1,5 +1,4 @@
 import numpy as np
-from numpy import lib
 from numpy.core.fromnumeric import mean
 
 
@@ -60,7 +59,7 @@ class Chaining:
 
 class LinearProbing:
 	def __init__(self,m):
-		self.t = np.empty(m, dtype=np.object)
+		self.t = np.empty(m, dtype=object)
 		for i in range(m):
 			self.t[i] = None
 
@@ -71,8 +70,6 @@ class LinearProbing:
 		hash = myhash(x,m)
 
 		comparaciones = 0
-
-
 
 		while True:
 
@@ -110,6 +107,8 @@ palabras=texto.split()
 #   x = listaChaining.insert(palabra)
 #   listaComparacionChaining.append(x)
 
+# x="añsdlkañsldk"
+
 # print(f"El promedio de comparaciones es: {mean(listaComparacionChaining)} || El máx de comparaciones es: {max(listaComparacionChaining)}")
 # ######################################
 
@@ -117,7 +116,7 @@ palabras=texto.split()
 
 
 
-## Prueba LinearProbing #################
+# ## Prueba LinearProbing #################
 listaLinearProbing = LinearProbing(1000)
 listaComparacionLinearProbing = []
 
@@ -126,15 +125,17 @@ for palabra in palabras:
   listaComparacionLinearProbing.append(x)
 
 print(f"El promedio de comparaciones es: {mean(listaComparacionLinearProbing)} || El máx de comparaciones es: {max(listaComparacionLinearProbing)}")
-######################################
+
+y= 234234234
+# ######################################
 
 
-# TESTS DEBUGGING (no copiar a colab)
-cuentaNone = 0
+# # TESTS DEBUGGING (no copiar a colab)
+# cuentaNone = 0
 
-# Para ver si efectivamente hay 717 palabras distintas en linearprobing
-for item in listaLinearProbing.t:
-	if item == None:
-		cuentaNone = cuentaNone + 1
+# # Para ver si efectivamente hay 717 palabras distintas en linearprobing
+# for item in listaLinearProbing.t:
+# 	if item == None:
+# 		cuentaNone = cuentaNone + 1
 
-print(1000 - cuentaNone)
+# print(1000 - cuentaNone)
